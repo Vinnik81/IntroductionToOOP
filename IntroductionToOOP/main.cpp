@@ -26,7 +26,7 @@ public:
 	}
 }A,B,C;
 
-//#define STRUCT_POINT
+//#define StRUCT_POINT
 
 void main()
 {
