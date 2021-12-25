@@ -30,7 +30,7 @@ public:
 	}
 	void set_denominator(int denominator)
 	{
-		if (denominator == 0) denominator = 1;
+		if (denominator <= 0) denominator = 1;
 		this->denominator = denominator;
 	}
 	                 //       Конструктора:
@@ -46,7 +46,7 @@ public:
 		this->integer = integer;
 		this->numerator = 0;
 		this->denominator = 1;
-		cout << "SingleArgConstructor:" << this << endl;
+		cout << "SingleargConstructor:" << this << endl;
 	}
 	Fraction(int numerator, int denominator)
 	{
@@ -55,7 +55,7 @@ public:
 		this->denominator = denominator;
 		cout << "Constructor:\t" << this << endl;
 	}
-	Fraction(int integer, int numerator, int denomirator)
+	Fraction(int integer, int numerator, int denominator)
 	{
 		this->integer = integer;
 		this->numerator = numerator;
@@ -337,6 +337,6 @@ void main()
 	cout << "\n=============================================\n";
 	cout << "R.reduce = "; R.reduce(); R.print();
 	cout << "\n=============================================\n";
-	cout << "A == B ? "; (A == B);
+	//cout << (Fraction(1,2) == Fraction(3,5)) << endl;
 	cout << "\n=============================================\n";
 }
