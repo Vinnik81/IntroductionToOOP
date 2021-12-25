@@ -52,14 +52,16 @@ public:
 	{
 		this->integer = 0;
 		this->numerator = numerator;
-		this->denominator = denominator;
+		//this->denominator = denominator;
+		set_denominator(denominator);
 		cout << "Constructor:\t" << this << endl;
 	}
-	Fraction(int integer, int numerator, int denomirator)
+	Fraction(int integer, int numerator, int denominator)
 	{
 		this->integer = integer;
 		this->numerator = numerator;
-		this->denominator = denominator;
+		//this->denominator = denominator;
+		set_denominator(denominator);
 		cout << "Constructor_2:\t" << this << endl;
 	}
 	Fraction(const Fraction& other)
