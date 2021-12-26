@@ -1,5 +1,8 @@
 ﻿#include <iostream>
+#include <Windows.h>
 using namespace std;
+
+//#define DEBUG
 
 class Fraction;
 Fraction operator+(Fraction left, Fraction rigth);
@@ -45,39 +48,59 @@ public:
 		this->integer = 0;
 		this->numerator = 0;
 		this->denominator = 1;
+#ifdef DEBUG
 		cout << "\nDefaultConstructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 	Fraction(int integer)
 	{
 		this->integer = integer;
 		this->numerator = 0;
 		this->denominator = 1;
+#ifdef DEBUG
 		cout << "SingleargConstructor:" << this << endl;
+#endif // DEBUG
+
 	}
 	Fraction(int numerator, int denominator)
 	{
 		this->integer = 0;
 		this->numerator = numerator;
 		set_denominator(denominator);
+#ifdef DEBUG
 		cout << "Constructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 	Fraction(int integer, int numerator, int denominator)
 	{
 		this->integer = integer;
 		this->numerator = numerator;
 		set_denominator(denominator);
-		cout << "Constructor_2:\t" << this << endl;
+#ifdef DEBUG
+       cout << "Constructor_2:\t" << this << endl;
+#endif // DEBUG
+
+		
 	}
 	Fraction(const Fraction& other)
 	{
 		this->integer = other.integer;
 		this->numerator = other.numerator;
 		this->denominator = other.denominator;
+#ifdef DEBUG
 		cout << "\nCopyConstructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 	~Fraction()
 	{
+
+#ifdef DEBUG
 		cout << "\nDestructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 	//    Операторы:
 	Fraction& operator=(const Fraction& other)
@@ -85,7 +108,11 @@ public:
 		this->integer = other.integer;
 		this->numerator = other.numerator;
 		this->denominator = other.denominator;
+
+#ifdef DEBUG
 		cout << "CopyAssignment:\t" << this << endl;
+#endif // DEBUG
+
 		return *this;
 	}
 	Fraction& operator+=(const Fraction& other)
@@ -103,6 +130,28 @@ public:
 	Fraction& operator/=(const Fraction& other)
 	{
 		return *this = *this / other;
+	}
+	Fraction& operator++()    //Перегрузка инкремента (префиксная)
+	{
+		integer++;
+		return *this;
+	}
+	Fraction& operator++(int)    //Перегрузка инкремента (постфиксная)
+	{
+		Fraction post = *this;
+		integer++;
+		return post;
+	}
+	Fraction& operator--()    //Перегрузка декремента (префиксная)
+	{
+		integer--;
+		return *this;
+	}
+	Fraction& operator--(int)    //Перегрузка декремента (постфиксная)
+	{
+		Fraction post = *this;
+		integer--;
+		return post;
 	}
 	//             Методы:
 	Fraction& to_proper()
@@ -253,6 +302,9 @@ Fraction operator/(Fraction left, Fraction rigth)
 //
 void main()
 {
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	COORD coord;
+	SetConsoleDisplayMode(hConsole, CONSOLE_FULLSCREEN_MODE, &coord);
 	setlocale(LC_ALL, "");
 	cout << "=============================================\n";
 	Fraction A(3, 9);
@@ -321,24 +373,43 @@ void main()
 	cout << "\n=============================================\n";
 	Fraction Q(30, 10, 15);
 	Fraction R(30, 8);
-	cout << "Q = "; Q.print();
+	cout << "Q.to_improper = "; Q.print();
 	cout << " = "; Q.to_improper(); Q.print();
 	cout << "\n=============================================\n";
-	cout << "R = "; R.print();
+	cout << "R.to_proper = "; R.print();
 	cout << " = "; R.to_proper(); R.print();
 	cout << "\n=============================================\n";
 	cout << "R.reduce = "; R.reduce(); R.print();
 	cout << "\n=============================================\n";
-	cout << (Fraction(1,2) == Fraction(3,5)) << endl;
+	cout << "Fraction_1 == Fraction_2 ? = ";
+	cout << (Fraction(1,2) == Fraction(3,5));
 	cout << "\n=============================================\n";
-	cout << (Fraction(1,2) != Fraction(3,5)) << endl;
+	cout << "Fraction_1 != Fraction_2 ? = ";
+	cout << (Fraction(1,2) != Fraction(3,5));
 	cout << "\n=============================================\n";
-	cout << (Fraction(1,2) > Fraction(3,5)) << endl;
+	cout << "Fraction_1 > Fraction_2 ? = ";
+	cout << (Fraction(1,2) > Fraction(3,5));
 	cout << "\n=============================================\n";
-	cout << (Fraction(1,2) < Fraction(3,5)) << endl;
+	cout << "Fraction_1 < Fraction_2 ? = ";
+	cout << (Fraction(1,2) < Fraction(3,5));
 	cout << "\n=============================================\n";
-	cout << (Fraction(1,2) >= Fraction(3,5)) << endl;
+	cout << "Fraction_1 >= Fraction_2 ? = ";
+	cout << (Fraction(1,2) >= Fraction(3,5));
 	cout << "\n=============================================\n";
-	cout << (Fraction(1,2) <= Fraction(3,5)) << endl;
+	cout << "Fraction_1 <= Fraction_2 ? = ";
+	cout << (Fraction(1,2) <= Fraction(3,5));
 	cout << "\n=============================================\n";
+	Fraction S(3, 4, 5); cout << "S = "; S.print(); cout << " ";
+	cout << "\n=============================================\n";
+	Fraction S2 = S++;
+	S2.print(); cout << " S2 = S++ "; S.print();
+	cout << "\n=============================================\n";
+	Fraction S3 = ++S;
+	S3.print(); cout << " S3 = ++S "; S.print();
+	cout << "\n=============================================\n";
+	Fraction S4 = S--;
+	S4.print(); cout << " S4 = S-- "; S.print();
+	cout << "\n=============================================\n";
+	Fraction S5 = --S;
+	S5.print(); cout << " S5 = --S "; S.print();
 }
