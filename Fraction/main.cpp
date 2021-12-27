@@ -1,6 +1,9 @@
 ﻿#include <iostream>
 #include <Windows.h>
 using namespace std;
+using std::cout;
+using std::cin;
+using std::endl;
 
 //#define DEBUG
 
@@ -299,13 +302,39 @@ Fraction operator/(Fraction left, Fraction rigth)
 {
 	return left * rigth.inverted();
 }
-//
+std::ostream& operator<<(std::ostream& os, const Fraction& obj)
+{
+	if (obj.get_integer()) cout << obj.get_integer();
+	if (obj.get_numerator())
+	{
+		if (obj.get_integer()) cout << "(";
+		cout << obj.get_numerator() << "/" << obj.get_denominator();
+		if (obj.get_integer()) cout << ")";
+	}
+	else if (obj.get_integer() == 0) cout << 0;
+	return os;
+}
+std::istream& operator>>(std::istream& is, Fraction& obj)
+{
+	int integer{}, numerator{}, denominator{};
+	cout << "integer: "; cin >> integer;
+	cout << "numerator: "; cin >> numerator;
+	cout << "denominator: "; cin >> denominator;
+	obj.set_integer(integer);
+	obj.set_numerator(numerator);
+	obj.set_denominator(denominator);
+	return is;
+}
+
+//#define OPERATORS_CHEK
+
 void main()
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD coord;
 	SetConsoleDisplayMode(hConsole, CONSOLE_FULLSCREEN_MODE, &coord);
 	setlocale(LC_ALL, "");
+#ifdef  OPERATORS_CHEK
 	cout << "=============================================\n";
 	Fraction A(3, 9);
 	cout << "A = "; A.print();
@@ -382,22 +411,22 @@ void main()
 	cout << "R.reduce = "; R.reduce(); R.print();
 	cout << "\n=============================================\n";
 	cout << "Fraction_1 == Fraction_2 ? = ";
-	cout << (Fraction(1,2) == Fraction(3,5));
+	cout << (Fraction(1, 2) == Fraction(3, 5));
 	cout << "\n=============================================\n";
 	cout << "Fraction_1 != Fraction_2 ? = ";
-	cout << (Fraction(1,2) != Fraction(3,5));
+	cout << (Fraction(1, 2) != Fraction(3, 5));
 	cout << "\n=============================================\n";
 	cout << "Fraction_1 > Fraction_2 ? = ";
-	cout << (Fraction(1,2) > Fraction(3,5));
+	cout << (Fraction(1, 2) > Fraction(3, 5));
 	cout << "\n=============================================\n";
 	cout << "Fraction_1 < Fraction_2 ? = ";
-	cout << (Fraction(1,2) < Fraction(3,5));
+	cout << (Fraction(1, 2) < Fraction(3, 5));
 	cout << "\n=============================================\n";
 	cout << "Fraction_1 >= Fraction_2 ? = ";
-	cout << (Fraction(1,2) >= Fraction(3,5));
+	cout << (Fraction(1, 2) >= Fraction(3, 5));
 	cout << "\n=============================================\n";
 	cout << "Fraction_1 <= Fraction_2 ? = ";
-	cout << (Fraction(1,2) <= Fraction(3,5));
+	cout << (Fraction(1, 2) <= Fraction(3, 5));
 	cout << "\n=============================================\n";
 	Fraction S(3, 4, 5); cout << "S = "; S.print(); cout << " ";
 	cout << "\n=============================================\n";
@@ -412,4 +441,15 @@ void main()
 	cout << "\n=============================================\n";
 	Fraction S5 = --S;
 	S5.print(); cout << " S5 = --S "; S.print();
+#endif //  OPERATORS_CHEK
+
+	Fraction A;
+	Fraction B;
+	cout << "Введите первую дробь: \n"; cin >> A;
+	cout << "Введите вторую дробь: \n"; cin >> B;
+	cout << endl;
+	Fraction C = A * B;
+	cout << A << " * " << B << " = " << C << endl;
+	
+
 }
