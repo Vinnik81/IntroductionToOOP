@@ -87,6 +87,15 @@ public:
 
 		
 	}
+	Fraction(double decimal)   //преобразование десятичной дроби в обычную
+	{
+		decimal += 0.000001; 
+		integer = decimal;
+		denominator = 10000;
+		decimal -= integer;
+		numerator = decimal * denominator;
+		reduce();
+	}
 	Fraction(const Fraction& other)
 	{
 		this->integer = other.integer;
@@ -156,6 +165,15 @@ public:
 		integer--;
 		return post;
 	}
+	explicit operator int()const
+	{
+		return integer;
+	}
+	explicit operator double()const
+	{
+		return integer + (double)numerator / denominator;
+	}
+
 	//             Методы:
 	Fraction& to_proper()
 	{
@@ -314,7 +332,7 @@ std::ostream& operator<<(std::ostream& os, const Fraction& obj)
 	else if (obj.get_integer() == 0) cout << 0;
 	return os;
 }
-std::istream& operator>>(std::istream& is, Fraction& obj)
+std::istream& operator>>(std::istream& is, Fraction& obj)   // ввод дробей с клавиатуры
 {
 	int integer{}, numerator{}, denominator{};
 	cout << "integer: "; cin >> integer;
@@ -327,6 +345,8 @@ std::istream& operator>>(std::istream& is, Fraction& obj)
 }
 
 //#define OPERATORS_CHEK
+//#define ARITHMETIC_CHEK
+#define CONVERTING_DECIMAL_TO_NORMAL
 
 void main()
 {
@@ -443,6 +463,7 @@ void main()
 	S5.print(); cout << " S5 = --S "; S.print();
 #endif //  OPERATORS_CHEK
 
+#ifdef ARITHMETIC_CHEK
 	Fraction A;
 	Fraction B;
 	cout << "Введите первую дробь: \n"; cin >> A;
@@ -450,6 +471,29 @@ void main()
 	cout << endl;
 	Fraction C = A * B;
 	cout << A << " * " << B << " = " << C << endl;
-	
+	cout << "=============================================\n";
+	Fraction D = C++;
+	cout << D << " =>++ " << C << endl;
+	cout << "=============================================\n";
+	Fraction E = ++C;
+	cout << E << " ++=> " << C << endl;
+	cout << "=============================================\n";
+	Fraction F = C--;
+	cout << F << " =>-- " << C << endl;
+	cout << "=============================================\n";
+	Fraction G = --C;
+	cout << G << " --=> " << C << endl;
+	cout << "=============================================\n";
+#endif // ARITHMETIC_CHEK
+
+#ifdef CONVERTING_DECIMAL_TO_NORMAL
+	double a;
+	cout << "===============================================\n";
+	cout << "Введите десятичную дробь до 1000-х долей: "; cin >> a;
+	Fraction A = a;
+	cout << a << " = " << A << endl;
+	cout << "===============================================\n";
+#endif // CONVERTING_DECIMAL_TO_NORMAL
+
 
 }
