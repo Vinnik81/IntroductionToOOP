@@ -99,32 +99,32 @@ public:
 	}
 	Fraction& reduce()
 	{
-		if (numerator == 0)
+		int numerator_gcf = (this->numerator); unsigned int denominator_gcf = this->denominator;
+		while (numerator_gcf != 0 && denominator_gcf != 0)
 		{
-			denominator = 1;
-			return *this;
+			if (abs(numerator_gcf) > denominator_gcf) { numerator_gcf = abs(numerator_gcf) % denominator_gcf; }
+			else { denominator_gcf = denominator_gcf % abs(numerator_gcf); }
 		}
-		int bol, men, ost; //бльшее, меньшее значение и остаток для нохождение НОД
-		if (numerator > denominator)
-		{
-			bol = numerator;
-			men = denominator;
-		}
-		else
-		{
-			bol = denominator;
-			men = numerator;
-		}
-		do
-		{
-			ost = bol % men;
-			bol = men;
-			men = ost;
-		} while (ost);
-		int GCF = bol; //НОД
-		numerator /= GCF;
-		denominator /= GCF;
-		return to_proper();
+		int gcf = numerator_gcf + denominator_gcf;
+		if (this->numerator < 0) { this->numerator = -(abs(this->numerator) / gcf); }
+		else { this->numerator = this->numerator / gcf; }
+		this->denominator = this->denominator / gcf;
+		return  *this;
+	}
+	Fraction(double decimal)
+	{
+		decimal += 1e-11;
+		//decimal - десятичная дробь
+		//1) Сохраняем целую часть дробного числа:
+		integer = decimal;	//implicit coversion (неявное преобразование)
+		//2) Убираем целую часть из дробного числа:
+		decimal -= integer;
+		//3) Вытаскиваем максимально возможное количество десятичных разрядов 
+		//из дробной части числа, и сохраняем все эти разряды в числитель:
+		denominator = 1e+9;	//1*10^9
+		numerator = decimal * denominator;
+		reduce();
+
 	}
 	                  //    Операторы:
 	Fraction& operator=(const Fraction& other)
@@ -260,6 +260,53 @@ Fraction operator/(const Fraction& left, const Fraction& rigth)
 	result.set_denominator(left.get_denominator() * rigth.get_numerator());
 	return result;
 }
+std::ostream& operator<<(std::ostream& os, const Fraction& obj)
+{
+	if (obj.get_integer())cout << obj.get_integer();
+	if (obj.get_numerator())
+	{
+		if (obj.get_integer())cout << "(";
+		cout << obj.get_numerator() << "/" << obj.get_denominator();
+		if (obj.get_integer())cout << ")";
+	}
+	else if (obj.get_integer() == 0)cout << 0;
+	return os;
+}
+istream& operator>>(istream& is, Fraction& obj)
+{
+	/*int integer, numerator, denominator;
+	cin >> integer >> numerator >> denominator;
+	obj.set_integer(integer);
+	obj.set_numerator(numerator);
+	obj.set_denominator(denominator);
+	;*/
+	obj = Fraction();
+	const int SIZE = 256;
+	char buffer[SIZE] = {};
+	//is >> buffer;
+	is.getline(buffer, SIZE);
+	char delimiters[] = "/( )";
+	char* number[3] = {};
+	int n = 0;
+	for (char* pch = strtok(buffer, delimiters); pch; pch = strtok(NULL, delimiters))
+	{
+		number[n++] = pch;
+	}
+	switch (n)
+	{
+	case 1: obj.set_integer(atoi(number[0])); break;
+	case 2: 
+		obj.set_numerator(atoi(number[0])); 
+		obj.set_denominator(atoi(number[1]));
+		break;
+	case 3:
+		obj.set_integer(atoi(number[0]));
+		obj.set_numerator(atoi(number[1]));
+		obj.set_denominator(atoi(number[2]));
+	}
+   return is;
+}
+
 //
 void main()
 {
@@ -341,4 +388,8 @@ void main()
 	cout << "\n=============================================\n";
 	cout << "A == B ? "; (A == B);
 	cout << "\n=============================================\n";
+	Fraction S = 2.75;
+	cout << S << endl;
+	cout << "Введите дробь: "; cin >> S;
+	cout << S;
 }
