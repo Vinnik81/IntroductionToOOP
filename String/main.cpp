@@ -1,4 +1,4 @@
-#include<iostream>
+п»ї#include<iostream>
 #include<Windows.h>
 using namespace std;
 
@@ -70,7 +70,7 @@ cout << str << endl;
 const char* str1 = "World";*/
 	const int SIZE = 20;
 	char str[SIZE] = {};
-	cout << "Введите строку: ";
+	cout << "Р’РІРµРґРёС‚Рµ СЃС‚СЂРѕРєСѓ: ";
 	//SetConsoleCP(1251);
 	//cin >> str;
 	cin.getline(str, SIZE);
@@ -80,8 +80,8 @@ const char* str1 = "World";*/
 #ifdef BASE_CHEK
 	String str1;
 	str1.print();
-	//String str2 = 25; обычный конструктор
-	String str2(25); //explicit конструктор
+	//String str2 = 25; РѕР±С‹С‡РЅС‹Р№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+	String str2(25); //explicit РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 	str2.print();
 	cout << sizeof("Hello") << endl;
 	cout << "StringLength: " << StringLength("Hello") << endl;
