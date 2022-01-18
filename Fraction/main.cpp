@@ -1,11 +1,17 @@
 ﻿#include <iostream>
 using namespace std;
+using std::cin;
+using std::cout;
+using std::endl;
 
-class Fraction
+//#define DEBUG
+
+
+class Fraction	//Объявление и описание класса
 {
-	int integer;
-	int numerator;
-	int denominator;
+	int integer;		//Целая часть
+	int numerator;		//Числитель
+	int denominator;	//Знаменатель
 
 public:
 	int get_integer()const
@@ -39,14 +45,20 @@ public:
 		this->integer = 0;
 		this->numerator = 0;
 		this->denominator = 1;
+#ifdef DEBUG
 		cout << "\nDefaultConstructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
-	Fraction(int integer)
+	explicit Fraction(int integer)
 	{
 		this->integer = integer;
 		this->numerator = 0;
 		this->denominator = 1;
+#ifdef DEBUG
 		cout << "SingleArgConstructor:" << this << endl;
+#endif // DEBUG
+
 	}
 	Fraction(int numerator, int denominator)
 	{
@@ -54,7 +66,10 @@ public:
 		this->numerator = numerator;
 		//this->denominator = denominator;
 		set_denominator(denominator);
+#ifdef DEBUG
 		cout << "Constructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 	Fraction(int integer, int numerator, int denominator)
 	{
@@ -62,18 +77,27 @@ public:
 		this->numerator = numerator;
 		//this->denominator = denominator;
 		set_denominator(denominator);
+#ifdef DEBUG
 		cout << "Constructor_2:\t" << this << endl;
+#endif // DEBUG
+
 	}
 	Fraction(const Fraction& other)
 	{
 		this->integer = other.integer;
 		this->numerator = other.numerator;
 		this->denominator = other.denominator;
+#ifdef DEBUG
 		cout << "\nCopyConstructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 	~Fraction()
 	{
+#ifdef DEBUG
 		cout << "\nDestructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 	void print()const
 	{
@@ -84,6 +108,16 @@ public:
 		}
 		else if (integer == 0) cout << 0 << endl;
 	}
+	//				Type-cast operators:
+	explicit operator int()const
+	{
+		return integer;
+	}
+	explicit operator double()const
+	{
+		return integer + (double)numerator / denominator;
+	}
+
 	//             Методы:
 	Fraction& to_proper()
 	{
@@ -124,7 +158,7 @@ public:
 		denominator = 1e+9;	//1*10^9
 		numerator = decimal * denominator;
 		reduce();
-
+		cout << "1ArgConstructor:" << this << endl;
 	}
 	                  //    Операторы:
 	Fraction& operator=(const Fraction& other)
@@ -280,14 +314,16 @@ istream& operator>>(istream& is, Fraction& obj)
 	obj.set_numerator(numerator);
 	obj.set_denominator(denominator);
 	;*/
-	obj = Fraction();
+	obj = Fraction();		//Обнуляем объект - задаем ему значение по умолчанию
 	const int SIZE = 256;
 	char buffer[SIZE] = {};
 	//is >> buffer;
-	is.getline(buffer, SIZE);
+	is.getline(buffer, SIZE);		//Вводит строку с пробелами
 	char delimiters[] = "/( )";
-	char* number[3] = {};
-	int n = 0;
+	char* number[3] = {};		//Сюда будут сохраняться числа из исходной строки (из buffer)
+	int n = 0;					//считает, сколько чисел мы вытащили из исходной строки
+	//http://cplusplus.com/reference/cstring/
+	//http://cplusplus.com/reference/cstring/strtok/
 	for (char* pch = strtok(buffer, delimiters); pch; pch = strtok(NULL, delimiters))
 	{
 		number[n++] = pch;
@@ -295,6 +331,9 @@ istream& operator>>(istream& is, Fraction& obj)
 	switch (n)
 	{
 	case 1: obj.set_integer(atoi(number[0])); break;
+		//atoi(str);	//принимает строку, и возвращает int-овое значение числа, 
+						//хранящегося в этой строке
+		//atoi(str);	//преобразует строку в число
 	case 2: 
 		obj.set_numerator(atoi(number[0])); 
 		obj.set_denominator(atoi(number[1]));
@@ -306,12 +345,14 @@ istream& operator>>(istream& is, Fraction& obj)
 	}
    return is;
 }
-
-//
+//#define OPERATORS_CHECK
+//#define TYPE_CONVERSIONS_BASICS
+#define CONVERSIONS_FROM_OTHER_TYPES_TO_CLASS
 void main()
 {
 	setlocale(LC_ALL, "");
 	cout << "=============================================\n";
+#ifdef OPERATORS_CHECK
 	Fraction A(3, 9);
 	cout << "A = "; A.print();
 	cout << "\n=============================================\n";
@@ -388,8 +429,43 @@ void main()
 	cout << "\n=============================================\n";
 	cout << "A == B ? "; (A == B);
 	cout << "\n=============================================\n";
-	Fraction S = 2.75;
+#endif // OPER
+
+	//cout << ((double)Fraction(1, 2) == (double)Fraction(5, 10))<< endl;
+
+	Fraction S = 2.75;	//From double to Fraction
+	//From other to class (преобразование другого типа в наш тип)
 	cout << S << endl;
 	cout << "Введите дробь: "; cin >> S;
-	cout << S;
+	cout << S << endl;
+#ifdef TYPE_CONVERSIONS_BASICS
+	//Warning: conversion from type to type possible loss of data.
+//		l-value = r-value;
+	int a = 2;		//No conversion
+	double b = 3;	//Conversion from less to more
+	int c = b;		//Conversion from more to less without data loss
+	int d = 5.2;	//Conversion from more to less with data loss
+	char e = 515;	//Conversion from int to char. Truncation (Усечение, урезание)
+					//Arithmetical overflow
+	cout << (int)e << endl;
+#endif // TYPE_CONVERSIONS_BASICS
+#ifdef CONVERSIONS_FROM_OTHER_TYPES_TO_CLASS
+	//1. Single-argument constructor
+	//2. Assignment operator
+
+	//(type)value - C-Like notation
+	//type(value) - Functional notation
+
+	double a = 2;	//Conversion from 'int' to 'double'
+	5;//Числовая константа типа 'int'
+	Fraction A = (Fraction)5;	//Conversion from 'int' to 'Fraction'
+	A;//Переменная типа 'Fraction'
+	cout << A << endl;
+
+	Fraction B;	//Default constructor
+	cout << "\n--------------------------\n";
+	B = Fraction(8);
+	cout << "\n--------------------------\n";
+	cout << B << endl;
+#endif // CONVERSIONS_FROM_OTHER_TYPES_TO_CLASS
 }
