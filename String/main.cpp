@@ -61,7 +61,7 @@ public:
 		cout << "CopyAssign:\t" << this << endl;
 		return *this;
 	}
-	String& operator+=(const String& other)
+	String& operator+=(const String& other)		//Оператор +=
 	{
 		return *this = *this + other;
 	}
@@ -72,9 +72,28 @@ public:
 		cout << "Size:\t" << size << endl;
 		cout << "Str:\t" << str << endl;
 	}
+	bool is_palindrom(const char* str)		//Определяет строку пaлиндром
+	{
+		this->size = StringLength(str);
+		char* buffer = new char[size + 1]{};
+		for (int i = 0; str[i]; i++)buffer[i] = str[i];
+		size = StringLength(buffer);
+		for (int i = 0; i < size / 2; i++)
+		{
+			if (buffer[i] != buffer[size - 1 - i])
+			{
+				delete[] buffer;
+				cout << "Not palindrom " << endl;
+				return false;
+			}
+			delete[] buffer;
+			cout << "It's palindrom " << endl;
+			return true;
+		}
+	}
 };
 
-String operator+(const String& left, const String& right)
+String operator+(const String& left, const String& right)		//Оператор +
 {
 	String result(left.get_size() + right.get_size() - 1);
 	for (int i = 0; i < left.get_size(); i++)
@@ -140,6 +159,9 @@ str1[2] = 0;*/
 	cout << "\n================================" << endl;
 	str1 += str2;
 	cout << "\n" << str1 << endl;
+	cout << "\n================================" << endl;
+	String str4;
+	cout << str4.is_palindrom("ротор");
 	cout << "\n================================" << endl;
 #endif // HOME_WORK
 
