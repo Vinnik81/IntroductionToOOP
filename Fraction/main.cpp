@@ -5,7 +5,7 @@ using std::cout;
 using std::cin;
 using std::endl;
 
-//#define DEBUG
+#define DEBUG
 
 class Fraction;
 Fraction operator+(Fraction left, Fraction rigth);
@@ -46,40 +46,32 @@ public:
 		this->denominator = denominator;
 	}
 	                 //       Конструктора:
-	Fraction()
+	Fraction() :integer(0), numerator(0), denominator(1)
 	{
-		this->integer = 0;
-		this->numerator = 0;
-		this->denominator = 1;
+		
 #ifdef DEBUG
 		cout << "\nDefaultConstructor:\t" << this << endl;
 #endif // DEBUG
 
 	}
-	Fraction(int integer)
+	Fraction(int integer) :integer(integer), numerator(0), denominator(1)
 	{
-		this->integer = integer;
-		this->numerator = 0;
-		this->denominator = 1;
+		
 #ifdef DEBUG
 		cout << "SingleargConstructor:" << this << endl;
 #endif // DEBUG
 
 	}
-	Fraction(int numerator, int denominator)
+	Fraction(int numerator, int denominator) :integer(0), numerator(numerator)
 	{
-		this->integer = 0;
-		this->numerator = numerator;
 		set_denominator(denominator);
 #ifdef DEBUG
 		cout << "Constructor:\t" << this << endl;
 #endif // DEBUG
 
 	}
-	Fraction(int integer, int numerator, int denominator)
+	Fraction(int integer, int numerator, int denominator) :integer(integer), numerator(numerator)
 	{
-		this->integer = integer;
-		this->numerator = numerator;
 		set_denominator(denominator);
 #ifdef DEBUG
        cout << "Constructor_2:\t" << this << endl;
@@ -89,18 +81,16 @@ public:
 	}
 	Fraction(double decimal)   //преобразование десятичной дроби в обычную
 	{
-		decimal += 0.000001; 
+		decimal += 1e-11;
 		integer = decimal;
-		denominator = 10000;
+		denominator = 1e+9;
 		decimal -= integer;
 		numerator = decimal * denominator;
 		reduce();
 	}
-	Fraction(const Fraction& other)
+	Fraction(const Fraction& other) :integer(other.integer), numerator(other.numerator), denominator(other.denominator)
 	{
-		this->integer = other.integer;
-		this->numerator = other.numerator;
-		this->denominator = other.denominator;
+
 #ifdef DEBUG
 		cout << "\nCopyConstructor:\t" << this << endl;
 #endif // DEBUG
@@ -345,8 +335,8 @@ std::istream& operator>>(std::istream& is, Fraction& obj)   // ввод дроб
 }
 
 //#define OPERATORS_CHEK
-//#define ARITHMETIC_CHEK
-#define CONVERTING_DECIMAL_TO_NORMAL
+#define ARITHMETIC_CHEK
+//#define CONVERTING_DECIMAL_TO_NORMAL
 
 void main()
 {
