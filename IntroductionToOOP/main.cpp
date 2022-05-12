@@ -18,7 +18,10 @@ public:
 	}
 	void set_x(double x)
 	{
-		this->x = x;
+		this->x = x;//Encapsulation DONE
+		//this - это указатель на объект, для которого вызывается метод
+		//Изнутри метода невозможно узнать имя объекта, для которого он вызывается
+		//НО всегда можно узнать адрес этого объекта.
 	}
 	void set_y(double y)
 	{
@@ -54,14 +57,14 @@ public:
 		cout << "CopyAssignment:\t" << this << endl;
 		return *this;
 	}
-	Point& operator+=(const Point& other)
+	Point& operator+=(const Point& other)//Add-assign
 	{
 		this->x += other.x;
 		this->y += other.y;
 		return *this;
 	}
 
-	Point& operator++()
+	Point& operator++()//Prefix increment
 	{
 		x++;
 		y++;
@@ -112,25 +115,27 @@ Point operator+(const Point& left, const Point& right)
 }
 
 //#define CONSTRUCTORS_CHECK
-//#define StRUCT_POINT
+//#define STRUCT_POINT
 //#define DISTANCE_CHECK
 //#define ASSIGNMENT_CHEK
 void main()
 {
 	setlocale(LC_ALL, "");
 #ifdef  STRUCT_POINT
-	int a;
-	Point A;
+	//type name;
+	int a;//Объявляем переменную 'a' типа 'int'
+	Point A;//Объявляем переменную 'A' типа 'Point'
+			//Создаем объект (экземпляр) структуры 'Point'
 	A.x = 2;
 	A.y = 3;
 	cout << A.x << tab << A.y << endl;
 
-	Point* pA = &A;
+	Point* pA = &A;//Создаем указатель на объект нашей структуры
 	cout << pA->x << tab << pA->y << endl;
 #endif //  STRUCT_POINT
 
 #ifdef CONSTRUCTORS_CHECK
-	Point A;
+	Point A;//DefaultConstructor
 	double x, y;
 	//A.set_x(2);
 	//A.set_y(3);
@@ -140,7 +145,7 @@ void main()
 	Point B(22, 33);
 	B.print();
 
-	Point C = 5;
+	Point C = 5;//Single-argument constructor
 	C.print();
 
 	Point D(0, 123);
@@ -164,7 +169,7 @@ void main()
 	//Point B = A; // CopyConstructor
 	//B.print();
 	//Point C; //DefaultConstructor
-	//C = B;
+	//C = B;//CopyAssignment
 	//C.print();
 #ifdef ASSIGNMENT_CHEK
 	Point A, B, C;
@@ -192,3 +197,69 @@ void main()
 	B(123, 234);
 	B.print();
 }
+/*
+.  - Оператор прямого доступа (Point operator)
+-> - Оператор косвенного доступа (Arrow operator)
+*/
+
+/*
+1. Инкапсуляция (Encapsulation);
+Модификаторы доступа:
+private:	доступны только внутри класса.
+public:
+protected:
+get/set-методы
+get (взять, получить)	 - открывают доступ к переменным членам на чтение,
+						   т.е., поззволяют получить значение той или иной
+						   переменной-члена.
+set (задать, установить) - открывают доступ в переменным членам на запись,
+						   т.е., позволяют задать значение той или иной
+						   переменной-члена.
+2. Наследование (Inheritance);
+3. Полиморфизм  (Polymorphism);
+*/
+
+/*
+				SPECIAL MEMBERS
+Constructor - это метод, который создает объект. А именно, выделяет память под объект,
+			  и инициализирует его переменные члены.
+~Destructor	-
+operator=
+*/
+
+/*
+------------------------------------------------
+type name(parameters)
+{
+	//Function body:
+	......
+}
+------------------------------------------------
+*/
+
+/*
+------------------------------------------------
+type operator@(...)
+{
+	....
+	....
+	....
+}
+1. Перегрузить можно только существующие операторы:
+	+	перегружается;
+	*	перегружается;
+	++	перегружается;
+	**	НЕ перегружается;
+2. Не все существующие операторы можно перегрузить.
+   НЕ перегружаются:
+   ?: - Ternary operator;
+   :: - Scope operator (Оператор разрешения видимости);
+   .  - Point operator (Оператор прямого доступа);
+   .* - Pointer to member selection.
+   #
+   ##
+3. Перегруженные операторы сохраняют приоритет;
+4. Переопределить поведение операторов со встроенными типами данных
+   НЕВОЗМОЖНО!!!
+------------------------------------------------
+*/
